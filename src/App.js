@@ -44,7 +44,7 @@ class App extends Component {
     const iceCreamShops = this.state.data.map(item => {
       return(
         <div key = {item.id}>
-          <h4 style = {{marginBottom: '5px'}}>{item.name}</h4>
+          <h4 style = {{marginBottom: '5px' , marginTop: '25pt'}}>{item.name}</h4>
           <p>{item.location.address1 + ', ' + item.location.city}</p>
           <div>
             {this.state.data2.map(item2 => {
