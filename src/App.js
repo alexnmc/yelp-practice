@@ -14,12 +14,12 @@ secureAxios.interceptors.request.use((config)=>{
 class App extends Component {
 
   constructor(props){
-       super(props)
-       this.state = {
-         shops:  [],
-         reviews: [],
-         loading: "off"
-       }
+    super(props)
+      this.state = {
+        shops:  [],
+        reviews: [],
+        loading: "off"
+      }
   }
 
     componentDidMount(){
