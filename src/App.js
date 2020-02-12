@@ -16,8 +16,8 @@ class App extends Component {
   constructor(props){
        super(props)
        this.state = {
-         data:[{id: '123', name: "aaa" , location:{adress1:'aaa' }}],
-         data2:[{restaurant: "aaa" , review: 'sucki' , wroteBy: 'alex'}]
+         data:  [],
+         data2: []
        }
   }
 
@@ -25,18 +25,18 @@ class App extends Component {
       secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
           res.data.businesses.map(item => {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
-              this.state.data2.push({restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
+              let arr = this.state.data2
+              arr.push({restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
+              this.setState({data2: arr})
             })
           })
-          this.setState({data: res.data.businesses})
+          this.setState({data: res.data})
         })
     }
     
   
-  
   render(){
-
-    const icecream =  this.state.data.map(item => {
+    const icecream = this.state.data.map(item => {
       return(
         <div key = {item.id}>
           <h3>{item.name}</h3>
