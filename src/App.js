@@ -5,7 +5,7 @@ import axios from 'axios';
 const secureAxios = axios.create();
 
 secureAxios.interceptors.request.use((config)=>{
-    const token = 'kopD9FkgXgWcnGIDZo8qzkOoVX4jtKhaIDQooVMg-hbW32EH1Ful4UhfhixKlPb0-sYLbCufl-6YyfwzG8TDVQd6m7_h-9ANPNHMTY8fPb3CpuFSI1yw0cJXYUtEXnYx'
+    const token = "4clAzzrV-XBIeuLbBt6RPF-Kd6iVuRJ-BvQIl0icXpTc2SLUyE-xz0C8WZHynz2QMvnPX4RMi1dq_u-3rPni4u4mb9eQl0tcsrVC2eZm86e3e_097ZWokQ1es0xEXnYx"
     config.headers.Authorization = `Bearer ${token}`;
     return config;
 })
