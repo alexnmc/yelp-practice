@@ -16,8 +16,8 @@ class App extends Component {
   constructor(props){
        super(props)
        this.state = {
-         data:  [],
-         data2: [],
+         shops:  [],
+         reviews: [],
          loading: "off"
        }
   }
@@ -25,13 +25,13 @@ class App extends Component {
     componentDidMount(){
       this.setState({loading: "on"})
       secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
-        this.setState({data: res.data.businesses})
+        this.setState({shops: res.data.businesses})
           res.data.businesses.map(item => {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
-              let arr = this.state.data2
+              let arr = this.state.reviews
               arr.push({id: res.data.reviews[0].id, restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
-              this.setState({data2: arr})
-              if(this.state.data2.length === 5){
+              this.setState({reviews: arr})
+              if(this.state.reviews.length === 5){
                 this.setState({loading: 'off'})
               }
             })
@@ -41,13 +41,13 @@ class App extends Component {
     
   
   render(){
-    const iceCreamShops = this.state.data.map(item => {
+    const iceCreamShops = this.state.shops.map(item => {
       return(
         <div key = {item.id}>
           <h4 style = {{marginBottom: '5px' , marginTop: '25pt'}}>{item.name}</h4>
           <p>{item.location.address1 + ', ' + item.location.city}</p>
           <div>
-            {this.state.data2.map(item2 => {
+            {this.state.reviews.map(item2 => {
               if(item.name === item2.restaurant){
                 return(
                   <div key = {item2.id}>
