@@ -14,7 +14,7 @@ secureAxios.interceptors.request.use((config)=>{
 function App() {
 
   const [data , setData] = useState([])
-  const [rev , setRev] = useState({})
+  const [rev , setRev] = useState([])
 
   useEffect(() => {
     secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
@@ -22,9 +22,10 @@ function App() {
    
       res.data.businesses.map(item => {
         return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
-          setRev({[item.name]: res.data.reviews[0].text , wroteBy: res.data[0].user.name})
+          rev.push({restaurant: item.name  ,  review: res.data.reviews[0].text , wroteBy: res.data.reviews[0].user.name})
         })
-      }).catch(err => console.log(err))
+      })
+      console.log(rev)
     }).catch(err => console.log(err))
   } , [])
   
@@ -38,14 +39,16 @@ function App() {
           <div key = {item.id}>
             <h3>{item.name}</h3>
             <p>{item.location.address1 + ', ' + item.location.city}</p>
-            {rev.map(item => {
-              return(
-                <div key = {Math.random()}>
-                  <p>{item.text}</p>
-                  <p>{item.wroteBy}</p>
-                </div>
-              )
-            })}
+              {rev.map(item2 => {
+                if(item.name === item2.restaurant){
+                  return(
+                    <div key = {Math.random()}>
+                      <p>{item2.review}</p>
+                      <p>{item2.wroteBy}</p>
+                    </div>
+                  )
+                }
+              })}
           </div>
         )
       })}
