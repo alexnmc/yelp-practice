@@ -17,11 +17,13 @@ class App extends Component {
        super(props)
        this.state = {
          data:  [],
-         data2: []
+         data2: [],
+         loading: "off"
        }
   }
 
     componentDidMount(){
+      this.setState({loading: "on"})
       secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
         this.setState({data: res.data.businesses})
           res.data.businesses.map(item => {
@@ -29,9 +31,12 @@ class App extends Component {
               let arr = this.state.data2
               arr.push({restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
               this.setState({data2: arr})
+              if(this.state.data2.length === 5){
+                this.setState({loading: 'off'})
+              }
             })
           })
-        })
+      })
     }
     
   
@@ -62,7 +67,11 @@ class App extends Component {
       return (
         <div className="App">
           <h2>THE TOP 5 ICE CREAM SHOPS IN ALPHARETTA (BY YELP RATING): </h2>
-          {iceCreamShops}
+          {this.state.loading === "off" ? 
+            iceCreamShops
+            :
+            <div style = {{color: 'red'}}>Loading...</div>
+          }
         </div>
       )
     };
