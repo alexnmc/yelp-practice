@@ -23,6 +23,7 @@ class App extends Component {
 
     componentDidMount(){
       secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
+        this.setState({data: res.data.businesses})
           res.data.businesses.map(item => {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
               let arr = this.state.data2
@@ -30,24 +31,23 @@ class App extends Component {
               this.setState({data2: arr})
             })
           })
-          this.setState({data: res.data})
         })
     }
     
   
   render(){
-    const icecream = this.state.data.map(item => {
+    const iceCreamShops = this.state.data.map(item => {
       return(
         <div key = {item.id}>
-          <h3>{item.name}</h3>
+          <h4 style = {{marginBottom: '5px'}}>{item.name}</h4>
           <p>{item.location.address1 + ', ' + item.location.city}</p>
           <div>
             {this.state.data2.map(item2 => {
               if(item.name === item2.restaurant){
                 return(
                   <div key = {Math.random()}>
-                    <p style = {{color: 'red'}}>{item2.review}</p>
-                    <p>{item2.wroteBy}</p>
+                    <p style = {{color: 'blue'}}>"{item2.review}"</p>
+                    <p>- {item2.wroteBy}</p>
                   </div>
                 )
               }else{
@@ -62,7 +62,7 @@ class App extends Component {
       return (
         <div className="App">
           <h2>THE TOP 5 ICE CREAM SHOPS IN ALPHARETTA (BY YELP RATING): </h2>
-          {icecream}
+          {iceCreamShops}
         </div>
       )
     };
