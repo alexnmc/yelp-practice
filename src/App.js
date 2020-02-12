@@ -44,7 +44,7 @@ class App extends Component {
     const iceCreamShops = this.state.shops.map(item => {
       return(
         <div key = {item.id}>
-          <h4 style = {{marginBottom: '5px' , marginTop: '25pt'}}>{item.name}</h4>
+          <h3 style = {{marginBottom: '5px' , marginTop: '25pt'}}>{item.name}</h3>
           <p>{item.location.address1 + ', ' + item.location.city}</p>
           <div>
             {this.state.reviews.map(item2 => {
