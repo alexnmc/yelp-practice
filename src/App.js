@@ -29,7 +29,7 @@ class App extends Component {
           res.data.businesses.map(item => {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
               let arr = this.state.data2
-              arr.push({restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
+              arr.push({id: res.data.reviews[0].id, restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
               this.setState({data2: arr})
               if(this.state.data2.length === 5){
                 this.setState({loading: 'off'})
@@ -50,7 +50,7 @@ class App extends Component {
             {this.state.data2.map(item2 => {
               if(item.name === item2.restaurant){
                 return(
-                  <div key = {Math.random()}>
+                  <div key = {item2.id}>
                     <p style = {{color: 'blue'}}>"{item2.review}"</p>
                     <p>- {item2.wroteBy}</p>
                   </div>
