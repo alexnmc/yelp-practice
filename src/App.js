@@ -14,20 +14,19 @@ secureAxios.interceptors.request.use((config)=>{
 function App() {
 
   const [data , setData] = useState([])
-  const [rev , setRev] = useState([])
+  const [data2] = useState([])
 
   useEffect(() => {
     secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
       setData(res.data.businesses)
-   
       res.data.businesses.map(item => {
         return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
-          rev.push({restaurant: item.name  ,  review: res.data.reviews[0].text , wroteBy: res.data.reviews[0].user.name})
+          data2.push({restaurant: item.name  ,  review: res.data.reviews[0].text , wroteBy: res.data.reviews[0].user.name})
         })
       })
-      console.log(rev)
+      console.log(data2)
     }).catch(err => console.log(err))
-  } , [])
+  })
   
   
   
@@ -39,7 +38,7 @@ function App() {
           <div key = {item.id}>
             <h3>{item.name}</h3>
             <p>{item.location.address1 + ', ' + item.location.city}</p>
-              {rev.map(item2 => {
+              {data2.map(item2 => {
                 if(item.name === item2.restaurant){
                   return(
                     <div key = {Math.random()}>
@@ -47,6 +46,8 @@ function App() {
                       <p>{item2.wroteBy}</p>
                     </div>
                   )
+                }else{
+                  return null
                 }
               })}
           </div>
