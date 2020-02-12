@@ -70,7 +70,7 @@ class App extends Component {
           {this.state.loading === "off" ? 
             iceCreamShops
             :
-            <div style = {{color: 'red'}}>Loading...</div>
+            <div style = {{color: 'green'}}>Loading...</div>
           }
         </div>
       )
