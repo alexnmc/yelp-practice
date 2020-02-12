@@ -1,4 +1,4 @@
-import React, {useState , useEffect} from 'react';
+import React, {Component} from 'react';
 import './App.css';
 import axios from 'axios';
 
@@ -11,50 +11,58 @@ secureAxios.interceptors.request.use((config)=>{
 })
 
 
-function App() {
+class App extends Component {
 
-  const [data , setData] = useState([])
-  const [data2] = useState([])
+  constructor(props){
+       super(props)
+       this.state = {
+         data:[],
+         data2:[]
+       }
+  }
 
-  useEffect(() => {
-    secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
-      setData(res.data.businesses)
-      res.data.businesses.map(item => {
-        return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
-          data2.push({restaurant: item.name  ,  review: res.data.reviews[0].text , wroteBy: res.data.reviews[0].user.name})
-        })
-      })
-      console.log(data2)
-    }).catch(err => console.log(err))
-  })
+     componentDidMount(){
+      secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
+        this.setState({data: res.data.businesses}, () => {
+          res.data.businesses.map(item => {
+            return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
+              this.state.data2.push({restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
+            })
+          })
+        })}
+      )
+    }
   
   
-  
-  return (
-    <div className="App">
-      <h2>THE TOP 5 ICE CREAM SHOPS IN ALPHARETTA BY RATING: </h2>
-      {data.map(item => {
-        return(
-          <div key = {item.id}>
-            <h3>{item.name}</h3>
-            <p>{item.location.address1 + ', ' + item.location.city}</p>
-              {data2.map(item2 => {
-                if(item.name === item2.restaurant){
-                  return(
-                    <div key = {Math.random()}>
-                      <p>{item2.review}</p>
-                      <p>{item2.wroteBy}</p>
-                    </div>
-                  )
-                }else{
-                  return null
-                }
-              })}
-          </div>
-        )
-      })}
-    </div>
-  );
+  render(){
+      return (
+        <div className="App">
+          <h2>THE TOP 5 ICE CREAM SHOPS IN ALPHARETTA (BY YELP RATING): </h2>
+          {this.state.data.map(item => {
+            return(
+              <div key = {item.id}>
+                <h3>{item.name}</h3>
+                <p>{item.location.address1 + ', ' + item.location.city}</p>
+                <div>
+                  {this.state.data2.map(item2 => {
+                    if(item.name === item2.restaurant){
+                      return(
+                        <div key = {Math.random()}>
+                          <p>{item2.review}</p>
+                          <p>{item2.wroteBy}</p>
+                        </div>
+                      )
+                    }else{
+                      return null
+                    }
+                  })}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )
+    };
 }
 
 export default App;
