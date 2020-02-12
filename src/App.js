@@ -24,8 +24,8 @@ function App() {
         return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
           setRev({[item.name]: res.data.reviews[0].text , wroteBy: res.data[0].user.name})
         })
-      })
-    })
+      }).catch(err => console.log(err))
+    }).catch(err => console.log(err))
   } , [])
   
   
@@ -40,7 +40,7 @@ function App() {
             <p>{item.location.address1 + ', ' + item.location.city}</p>
             {rev.map(item => {
               return(
-                <div>
+                <div key = {Math.random()}>
                   <p>{item.text}</p>
                   <p>{item.wroteBy}</p>
                 </div>
