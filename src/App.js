@@ -16,50 +16,53 @@ class App extends Component {
   constructor(props){
        super(props)
        this.state = {
-         data:[],
-         data2:[]
+         data:[{id: '123', name: "aaa" , location:{adress1:'aaa' }}],
+         data2:[{restaurant: "aaa" , review: 'sucki' , wroteBy: 'alex'}]
        }
   }
 
-     componentDidMount(){
+    componentDidMount(){
       secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
-        this.setState({data: res.data.businesses}, () => {
           res.data.businesses.map(item => {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
               this.state.data2.push({restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
             })
           })
-        })}
-      )
+          this.setState({data: res.data.businesses})
+        })
     }
+    
   
   
   render(){
+
+    const icecream =  this.state.data.map(item => {
+      return(
+        <div key = {item.id}>
+          <h3>{item.name}</h3>
+          <p>{item.location.address1 + ', ' + item.location.city}</p>
+          <div>
+            {this.state.data2.map(item2 => {
+              if(item.name === item2.restaurant){
+                return(
+                  <div key = {Math.random()}>
+                    <p style = {{color: 'red'}}>{item2.review}</p>
+                    <p>{item2.wroteBy}</p>
+                  </div>
+                )
+              }else{
+                return null
+              }
+            })
+            }
+          </div>
+        </div>
+      )
+    })
       return (
         <div className="App">
           <h2>THE TOP 5 ICE CREAM SHOPS IN ALPHARETTA (BY YELP RATING): </h2>
-          {this.state.data.map(item => {
-            return(
-              <div key = {item.id}>
-                <h3>{item.name}</h3>
-                <p>{item.location.address1 + ', ' + item.location.city}</p>
-                <div>
-                  {this.state.data2.map(item2 => {
-                    if(item.name === item2.restaurant){
-                      return(
-                        <div key = {Math.random()}>
-                          <p>{item2.review}</p>
-                          <p>{item2.wroteBy}</p>
-                        </div>
-                      )
-                    }else{
-                      return null
-                    }
-                  })}
-                </div>
-              </div>
-            )
-          })}
+          {icecream}
         </div>
       )
     };
