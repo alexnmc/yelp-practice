@@ -30,10 +30,11 @@ class App extends Component {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
               let arr = this.state.reviews
               arr.push({id: res.data.reviews[0].id, restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
-              this.setState({reviews: arr})
-              if(this.state.reviews.length === 5){
-                this.setState({loading: 'off'})
-              }
+                this.setState({reviews: arr}, () => {
+                  if(this.state.reviews.length === 5){
+                    this.setState({loading: 'off'})
+                  }
+                })
             })
           })
       })
@@ -42,7 +43,6 @@ class App extends Component {
   
   render(){
     const iceCreamShops = this.state.shops.map(item => {
-      console.log(item)
       return(
         <div key = {item.id}  style = {{width: '500px' , margi: 'auto'}}>
           <h3 style = {{marginBottom: '5px' , marginTop: '25pt'}}>{item.name}</h3>
