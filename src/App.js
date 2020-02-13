@@ -42,17 +42,19 @@ class App extends Component {
   
   render(){
     const iceCreamShops = this.state.shops.map(item => {
+      console.log(item)
       return(
-        <div key = {item.id}>
+        <div key = {item.id}  style = {{width: '500px' , margi: 'auto'}}>
           <h3 style = {{marginBottom: '5px' , marginTop: '25pt'}}>{item.name}</h3>
-          <p>{item.location.address1 + ', ' + item.location.city}</p>
+          <img alt = '' src = {item.image_url}   style = {{height:'200px' , with:'200px'}}/>
+          <p style = {{fontSize: '12px', fontWeight: '600'}}>{item.location.address1 + ', ' + item.location.city}</p>
           <div>
             {this.state.reviews.map(item2 => {
               if(item.name === item2.restaurant){
                 return(
                   <div key = {item2.id}>
                     <p style = {{color: 'blue'}}>"{item2.review}"</p>
-                    <p>- {item2.wroteBy}</p>
+                    <p style={{fontWeight: '600'}}>- {item2.wroteBy}</p>
                   </div>
                 )
               }else{
