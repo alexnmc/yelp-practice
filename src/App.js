@@ -18,7 +18,7 @@ class App extends Component {
       this.state = {
         shops:  [],
         reviews: [],
-        loading: "off"
+        loading:"off"
       }
   }
 
@@ -27,16 +27,15 @@ class App extends Component {
       secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=15&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
         this.setState({shops: res.data.businesses})
           res.data.businesses.map(item => {
-            return setTimeout(() => {
-              return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
-                let arr = [...this.state.reviews]
-                arr.push({id: res.data.reviews[0].id, restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
-                  this.setState({reviews: arr}, () => {
-                    if(this.state.reviews.length === 5){
-                      this.setState({loading:"off"})
-                    }
-                  })
-              })}, 3000)
+            return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
+              let arr = [...this.state.reviews]
+              arr.push({id: res.data.reviews[0].id, restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
+                this.setState({reviews: arr}, () => {
+                  if(this.state.reviews.length === 5){
+                    this.setState({loading:"off"})
+                  }
+                })
+            })
           })
       })
     }
