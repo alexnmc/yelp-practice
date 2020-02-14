@@ -18,7 +18,7 @@ class App extends Component {
       this.state = {
         shops:  [],
         reviews: [],
-        loading:"off"
+        loading: "off"
       }
   }
 
