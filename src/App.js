@@ -28,7 +28,7 @@ class App extends Component {
         this.setState({shops: res.data.businesses})
           res.data.businesses.map(item => {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
-              let arr = this.state.reviews
+              let arr = [...this.state.reviews]
               arr.push({id: res.data.reviews[0].id, restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
                 this.setState({reviews: arr}, () => {
                   if(this.state.reviews.length === 5){
@@ -42,7 +42,7 @@ class App extends Component {
     
   
   render(){
-    const iceCreamShops = this.state.shops.map(item => {
+    const iceCreamShops = () => this.state.shops.map(item => {
       return(
         <div key = {item.id}  style = {{width: '500px' , margi: 'auto'}}>
           <h3 style = {{marginBottom: '5px' , marginTop: '25pt'}}>{item.name}</h3>
@@ -70,7 +70,7 @@ class App extends Component {
         <div className="App">
           <h2>THE TOP 5 ICE CREAM SHOPS IN ALPHARETTA (BY YELP RATING): </h2>
           {this.state.loading === "off" ? 
-            iceCreamShops
+            iceCreamShops()
             :
             <div style = {{color: 'green'}}>Loading...</div>
           }
