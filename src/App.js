@@ -18,13 +18,13 @@ class App extends Component {
       this.state = {
         shops:  [],
         reviews: [],
-        loading: "off"
+        loading:"off"
       }
   }
 
     componentDidMount(){
-      this.setState({loading: "on"})
-      secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
+      this.setState({loading:"on"})
+      secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=15&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
         this.setState({shops: res.data.businesses})
           res.data.businesses.map(item => {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
@@ -32,7 +32,7 @@ class App extends Component {
               arr.push({id: res.data.reviews[0].id, restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
                 this.setState({reviews: arr}, () => {
                   if(this.state.reviews.length === 5){
-                    this.setState({loading: 'off'})
+                    this.setState({loading:"off"})
                   }
                 })
             })
