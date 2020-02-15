@@ -24,19 +24,24 @@ class App extends Component {
 
     componentDidMount(){
      this.setState({loading:"on"})
-      secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
-        this.setState({shops: res.data.businesses})
-          res.data.businesses.map(item => {
-            return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
-              let arr = [...this.state.reviews]
-              arr.push({id: res.data.reviews[0].id, restaurant: item.name, review: res.data.reviews[0].text, wroteBy: res.data.reviews[0].user.name})
-                this.setState({reviews: arr}, () => {
-                  if(this.state.reviews.length === 5){
-                    this.setState({loading:"off"})
-                  }
-                })
-            }).catch(err => console.log(err))
-          })
+      secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=10&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
+        let shops = res.data.businesses
+        this.setState({shops: shops})
+        for (let i = 0; i < shops.length; i++) {
+          ((i) => {
+            setTimeout(() => {
+              return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${res.data.businesses[i].id}/reviews`).then(response => {
+                let arr = [...this.state.reviews]
+                arr.push({id: response.data.reviews[0].id, restaurant: res.data.businesses[i].name, review: response.data.reviews[0].text, wroteBy: response.data.reviews[0].user.name})
+                  this.setState({reviews: arr}, () => {
+                    if(this.state.reviews.length === 10){
+                      this.setState({loading:"off"})
+                    }
+                  })
+              }).catch(err => console.log(err)) 
+            }, 1000*i)
+          })(i)
+        }  
       })
     }
 
