@@ -32,7 +32,7 @@ class App extends Component {
             setTimeout(() => {
               return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${res.data.businesses[i].id}/reviews`).then(response => {
                 let arr = [...this.state.reviews]
-                arr.push({id: response.data.reviews[0].id, restaurant: res.data.businesses[i].name, review: response.data.reviews[0].text, wroteBy: response.data.reviews[0].user.name})
+                arr.push({id: response.data.reviews[0].id, restaurant: shops[i].name, review: response.data.reviews[0].text, wroteBy: response.data.reviews[0].user.name})
                   this.setState({reviews: arr}, () => {
                     if(this.state.reviews.length === 10){
                       this.setState({loading:"off"})
