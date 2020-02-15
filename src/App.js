@@ -34,12 +34,12 @@ class App extends Component {
                 let arr = [...this.state.reviews]
                 arr.push({id: response.data.reviews[0].id, restaurant: shops[i].name, review: response.data.reviews[0].text, wroteBy: response.data.reviews[0].user.name})
                   this.setState({reviews: arr}, () => {
-                    if(this.state.reviews.length === 10){
+                    if(this.state.reviews.length === 5){
                       this.setState({loading:"off"})
                     }
                   })
               }).catch(err => console.log(err)) 
-            }, 1000*i)
+            }, 500*i)
           })(i)
         }  
       })
