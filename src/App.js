@@ -16,15 +16,15 @@ class App extends Component {
   constructor(props){
     super(props)
       this.state = {
-        shops:  [],
+        shops: [],
         reviews: [],
         loading:"off"
       }
   }
 
     componentDidMount(){
-      this.setState({loading:"on"})
-      secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=15&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
+     this.setState({loading:"on"})
+      secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=5&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
         this.setState({shops: res.data.businesses})
           res.data.businesses.map(item => {
             return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${item.id}/reviews`).then(res => {
@@ -35,12 +35,11 @@ class App extends Component {
                     this.setState({loading:"off"})
                   }
                 })
-            })
+            }).catch(err => console.log(err))
           })
       })
     }
-    
-  
+
   render(){
     const iceCreamShops = () => this.state.shops.map(item => {
       return(
