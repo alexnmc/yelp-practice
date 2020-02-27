@@ -10,9 +10,7 @@ secureAxios.interceptors.request.use((config)=>{
     return config;
 })
 
-
 class App extends Component {
-
   constructor(props){
     super(props)
       this.state = {
@@ -22,8 +20,8 @@ class App extends Component {
       }
   }
 
-    componentDidMount(){
-     this.setState({loading:"on"})
+  componentDidMount(){
+    this.setState({loading:"on"})
       secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=10&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
         let shops = res.data.businesses
         this.setState({shops: shops})
