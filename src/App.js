@@ -30,16 +30,17 @@ class App extends Component {
         for (let i = 0; i < shops.length; i++) {
           ((i) => {
             setTimeout(() => {
+              console.log('timer')
               return secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${res.data.businesses[i].id}/reviews`).then(response => {
                 let arr = [...this.state.reviews]
                 arr.push({id: response.data.reviews[0].id, restaurant: shops[i].name, review: response.data.reviews[0].text, wroteBy: response.data.reviews[0].user.name})
                   this.setState({reviews: arr}, () => {
-                    if(this.state.reviews.length === 5){
+                    if(this.state.reviews.length === 10){
                       this.setState({loading:"off"})
                     }
                   })
               }).catch(err => console.log(err)) 
-            }, 500*i)
+            }, 200 * i)
           })(i)
         }  
       })
