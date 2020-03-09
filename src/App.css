@@ -14,9 +14,17 @@ p{
 
 
 input{
-  width: 30pt;
+  width: 20pt;
   height: 14pt;
   margin: 5px;
-  margin-top: 0px;
+  border: 1px solid black;
+  padding: 5px;
+  font-size: 16px;
+  font-weight: 900;
+ }
 
+h2{
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
