@@ -14,6 +14,7 @@ class App extends Component {
   constructor(props){
     super(props)
       this.state = {
+        number: 5,
         shops: [],
         reviews: [],
         loading:"off"
@@ -21,8 +22,12 @@ class App extends Component {
   }
 
   componentDidMount(){
-    this.setState({loading:"on"})
-      secureAxios.get('https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=10&location=Alpharetta&term=icecream&sort_by=rating').then(res => {
+      this.getData()
+    }
+
+  getData = () => {
+    this.setState({loading:"on", shops: [], reviews: []})
+      secureAxios.get(`https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?limit=${this.state.number}&location=Alpharetta&term=icecream&sort_by=rating`).then(res => {
         let shops = res.data.businesses
         this.setState({shops: shops})
         for (let i = 0; i < shops.length; i++) {
@@ -33,7 +38,7 @@ class App extends Component {
                 let arr = [...this.state.reviews]
                 arr.push({id: response.data.reviews[0].id, restaurant: shops[i].name, review: response.data.reviews[0].text, wroteBy: response.data.reviews[0].user.name})
                   this.setState({reviews: arr}, () => {
-                    if(this.state.reviews.length === 10){
+                    if(this.state.reviews.length > 1){
                       this.setState({loading:"off"})
                     }
                   })
@@ -41,6 +46,13 @@ class App extends Component {
             }, 200 * i)
           })(i)
         }  
+      })
+    }
+
+    handleChange = (e) => {
+      const {name, value} = e.target
+      this.setState({
+        [name]: value
       })
     }
 
@@ -71,7 +83,14 @@ class App extends Component {
     })
       return (
         <div className="App">
-          <h2>THE TOP 5 ICE CREAM SHOPS IN ALPHARETTA (BY YELP RATING): </h2>
+          <h2>THE TOP 
+            <input
+              onBlur = {this.getData}
+              onChange = {this.handleChange}
+              name = 'number'
+              value = {this.state.number}
+             /> 
+            ICE CREAM SHOPS IN ALPHARETTA (BY YELP RATING): </h2>
           {this.state.loading === "off" ? 
             iceCreamShops()
             :
